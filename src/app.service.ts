@@ -21,10 +21,11 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit(): Promise<void> {
     //const entities = [AccountEntity];
+    const { TYPEDB } = process.env;
 
     this.databaseConnection = await createConnection({
       ...this.loadDBConfig(),
-      type: 'mysql',
+      type: 'postgres',
       //entities,
     }).catch((error: Error) => this.failToConnectDatabase(error));
   }
@@ -32,11 +33,11 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
   private loadDBConfig(): DBConfig {
     return {
       host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT ?? '3306', 10) || 3306,
-      database: process.env.DATABASE_NAME || 'nest',
-      username: process.env.DATABASE_USER || 'root',
-      password: process.env.DATABASE_PASSWORD || 'test',
-      synchronize: 'true' === process.env.DATABASE_SYNC || true,
+      port: parseInt(process.env.DATABASE_PORT ?? '5432', 10) || 5432,
+      database: process.env.DATABASE_NAME || 'cla',
+      username: process.env.DATABASE_USER || 'postgres',
+      password: process.env.DATABASE_PASSWORD || 'postgres',
+      synchronize: 'true' === process.env.DATABASE_SYNC || false,
       logging: 'true' === process.env.DATABASE_LOGGING || true,
     };
   }
